@@ -1,0 +1,210 @@
+/* 1. Global Variables & Basic Setup */
+:root {
+    --cyan: #00f2ff;
+    --pink: #ff00bf;
+    --gold: #ffcc00;
+    --red: #ff3e3e;
+    --bg: #01030a;
+    --glass: rgba(0, 242, 255, 0.03);
+    --border-glow: rgba(0, 242, 255, 0.2);
+}
+
+body, html {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--cyan);
+    font-family: 'Share Tech Mono', 'Kantumruy Pro', monospace; /* បន្ថែម Font ខ្មែរ */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 2. Layout Structure */
+.panel {
+    background: var(--glass);
+    border: 1px solid var(--border-glow);
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 15px rgba(0, 242, 255, 0.05);
+}
+
+header {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 2px solid var(--cyan);
+}
+
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 350px 1fr 350px;
+    flex-grow: 1;
+    gap: 10px;
+    padding: 10px;
+}
+
+footer {
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-top: 1px solid var(--border-glow);
+}
+
+/* 3. Hologram Map Display (3D Perspective) */
+
+.main-display {
+    perspective: 1500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+..hologram-map {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--cyan);
+    /* កំណត់មុំដើម */
+    transform: rotateX(40deg) rotateZ(-10deg);
+    transform-style: preserve-3d;
+    background: 
+        linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
+    
+    /* Transition សម្រាប់ធ្វើឱ្យចលនារលូន */
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform; /* Hardware Acceleration */
+}
+
+/* ចលនាបង្វិលនៅពេល Mouse Hover */
+.hologram-map:hover {
+    /* បង្វិលបន្តិចទៅម្ខាងទៀត ឬងាកតាម Mouse */
+    transform: rotateX(50deg) rotateZ(15deg);
+    box-shadow: 0 0 60px rgba(0, 242, 255, 0.25);
+}
+
+/* 4. Interactive Elements (Vehicles & Threats) */
+.vehicle {
+    position: absolute;
+    width: 12px; height: 18px;
+    background: var(--pink);
+    box-shadow: 0 0 10px var(--pink);
+    border-radius: 2px;
+    z-index: 10;
+}
+
+.threat-node {
+    position: absolute; width: 20px; height: 20px;
+    background: var(--red); border-radius: 50%;
+    animation: pulse 0.5s infinite;
+    box-shadow: 0 0 30px var(--red);
+    z-index: 20;
+}
+
+/* 5. UI Controls & Typography */
+.val { 
+    font-size: 1.6rem; 
+    color: #fff; 
+    text-shadow: 0 0 10px var(--cyan); 
+}
+
+.btn {
+    width: 100%; padding: 12px;
+    background: transparent; border: 1px solid var(--cyan);
+    color: var(--cyan); cursor: pointer;
+    text-transform: uppercase; margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover { 
+    background: var(--cyan); 
+    color: #000; 
+    box-shadow: 0 0 20px var(--cyan); 
+}
+
+.btn-priority { 
+    border-color: var(--pink); 
+    color: var(--pink); 
+}
+
+/* 6. Animations System */
+@keyframes scan { 
+    from { top: 0; } 
+    to { top: 100%; } 
+}
+
+.scanline {
+    position: absolute; width: 100%; height: 5px;
+    background: var(--cyan); opacity: 0.2;
+    animation: scan 5s linear infinite;
+    pointer-events: none;
+}
+
+.flicker { animation: flicker 0.1s infinite; }
+@keyframes flicker { 
+    0% { opacity: 1; } 
+    50% { opacity: 0.7; } 
+}
+
+@keyframes pulse { 
+    0% { transform: scale(1); opacity: 1; } 
+    100% { transform: scale(1.5); opacity: 0; } 
+}
+
+.cctv-grid {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.camera-box {
+    border: 1px solid rgba(0, 242, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    height: 80px;
+}
+
+.cam-label {
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    font-size: 0.55rem;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 5;
+}
+
+.cam-feed {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #051015 0%, #0a202a 100%);
+    position: relative;
+}
+
+/* បង្កើត Effect ស្កេនលើកាមេរ៉ា */
+.cam-feed::before {
+    content: "SCANNING...";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.6rem;
+    opacity: 0.5;
+    animation: blink 1s infinite;
+}
+
+.cam-feed::after {
+    content: "";
+    position: absolute;
+    width: 100%; height: 2px;
+    background: rgba(0, 242, 255, 0.2);
+    animation: camScan 3s linear infinite;
+}
+
+@keyframes camScan { 0% { top: 0; } 100% { top: 100%; } }
+@keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
