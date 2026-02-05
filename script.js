@@ -10,7 +10,7 @@ const vehicles = [];
 // 1. ប្រព័ន្ធសំឡេង AI (AI Voice Synthesis)
 function aiSpeak(msg) {
     const speech = new SpeechSynthesisUtterance(msg);
-    speech.lang = 'en-US';
+    speech.lang = 'km-KH';
     speech.rate = 1.1; // ល្បឿនលឿនបន្តិចបែបបច្ចេកវិទ្យា
     speech.pitch = 0.7; // សំឡេងធ្ងន់បែប Robot
     window.speechSynthesis.speak(speech);
