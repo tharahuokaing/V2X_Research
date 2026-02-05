@@ -65,21 +65,20 @@ function updateSystem() {
 
     requestAnimationFrame(updateSystem);
 }
-
 // 4. សកម្មភាពការពារ (Defense Actions)
 function fireSolar() {
-    aiSpeak("Activating solar blast. Targeting orbital threats.");
+    aiSpeak("កំពុងបាញ់កាំភ្លើងព្រះអាទិត្យ។ កំពុងវាយគោលដៅអ័រប៊ីត។");
     map.classList.add('flicker');
     addLog("SOLAR_DEFENSE_EXECUTED", "var(--gold)");
     
     setTimeout(() => {
         map.classList.remove('flicker');
-        aiSpeak("Threat neutralized. System secure.");
+        aiSpeak("គ្រោះថ្នាក់ត្រូវបានបំបាត់។ ប្រព័ន្ធមានសុវត្ថិភាព។");
     }, 2000);
 }
 
 function spawnEV() {
-    aiSpeak("Priority override initiated. Emergency vehicle on route.");
+    aiSpeak("បើកការបញ្ជាទិញអាទិភាព។ រថយន្តបន្ទាន់កំពុងធ្វើដំណើរ។");
     createVehicle(true);
     addLog("EMERGENCY_OVERRIDE_ACTIVE", "white");
 }
@@ -95,27 +94,14 @@ function simulateIntrusion() {
     node.style.top = Math.random() * 90 + '%';
     map.appendChild(node);
     
-    aiSpeak("Warning. Intrusion detected.");
+    aiSpeak("ព្រមាន។ រកឃើញការលួចចូល។");
     addLog(`INTRUSION_DETECTED: ${ip}`, "var(--red)");
     
     // បំបាត់ចំណុចវាយប្រហារក្រោយ ៤ វិនាទី
     setTimeout(() => {
         node.remove();
-        aiSpeak("Security breach mitigated.");
+        aiSpeak("ការលួចចូលត្រូវបានបំបាត់។");
     }, 4000);
-}
-
-// 6. មុខងារបន្ថែម Log
-function addLog(msg, color) {
-    const entry = document.createElement('div');
-    entry.style.color = color || 'inherit';
-    entry.style.fontSize = "0.75rem";
-    entry.style.marginBottom = "5px";
-    entry.innerText = `> [${new Date().toLocaleTimeString()}] ${msg}`;
-    logFeed.prepend(entry);
-    
-    // រក្សាទុកត្រឹម ១៥ log ចុងក្រោយ
-    if(logFeed.childNodes.length > 15) logFeed.removeChild(logFeed.lastChild);
 }
 
 // --- ចាប់ផ្តើមដំណើរការប្រព័ន្ធ (Boot sequence) ---
@@ -128,6 +114,6 @@ window.onload = () => {
     // បង្កើតការវាយប្រហារសាកល្បងរៀងរាល់ ២៥ វិនាទី
     setInterval(simulateIntrusion, 25000);
     
-    aiSpeak("Sentinel OS version 7 point 0 is now online. All systems functional.");
+    aiSpeak("Sentinel OS កំណែ ៧.០ បានចាប់ផ្តើម។ ប្រព័ន្ធទាំងអស់ដំណើរការទៀងទាត់។");
     addLog("SYSTEM_BOOT_SUCCESS", "var(--cyan)");
 };
