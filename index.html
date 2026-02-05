@@ -1,133 +1,105 @@
-/**
- * CYBER SENTINEL OS v7.0 - Core Script
- * គ្រប់គ្រងលើ: ចលនា V2X, ប្រព័ន្ធសំឡេង AI, និងការតាមដានការវាយប្រហារ
- */
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER SENTINEL OS | កម្ពុជា</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
 
-const map = document.getElementById('map');
-const logFeed = document.getElementById('log-feed');
-const vehicles = [];
+    <header class="panel">
+        <div class="os-brand">
+            <span class="glitch-text">SENTINEL OS v7.0</span>
+        </div>
+        <div class="time-module">
+            <span class="label">UNIX_CLOCK:</span>
+            <span id="unix-clock" class="clock-display">0000000000</span>
+        </div>
+        <div class="security-status">
+            STATUS: <span id="sys-status" style="color: #0f0;">SECURE</span>
+        </div>
+    </header>
 
-// 1. ប្រព័ន្ធសំឡេង AI (AI Voice Synthesis)
-function aiSpeak(msg) {
-    const speech = new SpeechSynthesisUtterance(msg);
-    speech.lang = 'en-US';
-    speech.rate = 1.1; // ល្បឿនលឿនបន្តិចបែបបច្ចេកវិទ្យា
-    speech.pitch = 0.7; // សំឡេងធ្ងន់បែប Robot
-    window.speechSynthesis.speak(speech);
-}
-
-// 2. ការបង្កើតរថយន្តស្វ័យប្រវត្តិ (V2X Vehicle Engine)
-function createVehicle(isEV) {
-    const v = document.createElement('div');
-    v.className = isEV ? 'vehicle flicker' : 'vehicle';
-    
-    // បើជាឡានពេទ្យ ឱ្យវាមានពណ៌ស និងពន្លឺខ្លាំង
-    if(isEV) {
-        v.style.background = '#ffffff';
-        v.style.boxShadow = '0 0 20px #ffffff, 0 0 10px #ff0000';
-    }
-    
-    const data = {
-        el: v,
-        x: Math.random() * 800,
-        y: isEV ? 250 : Math.random() * 500, // ឡានពេទ្យរត់គន្លងកណ្តាល
-        speed: isEV ? 7 : (1.2 + Math.random() * 2),
-        isEV: isEV
-    };
-    
-    map.appendChild(v);
-    vehicles.push(data);
-}
-
-// 3. ប្រព័ន្ធដំណើរការចលនា (Main System Loop)
-function updateSystem() {
-    // បច្ចុប្បន្នភាព Unix Timestamp
-    document.getElementById('unix-clock').innerText = Math.floor(Date.now() / 1000);
-
-    // គ្រប់គ្រងចលនារថយន្ត
-    vehicles.forEach((v, index) => {
-        v.x += v.speed;
+    <div class="dashboard-container">
         
-        // នៅពេលឡានរត់ផុតអេក្រង់
-        if(v.x > 900) {
-            if(v.isEV) {
-                v.el.remove();
-                vehicles.splice(index, 1);
-                addLog("EV_MISSION_COMPLETE", "var(--cyan)");
-                return;
-            }
-            v.x = -30;
-        }
-        
-        v.el.style.left = v.x + 'px';
-        v.el.style.top = v.y + 'px';
-    });
+        <aside class="panel sidebar-left">
+            <div class="stat-section">
+                <div class="stat-box">
+                    <div class="stat-label">NETWORK_TRAFFIC</div>
+                    <div class="val">4.2 GB/s</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">V2X_NODES_SYNC</div>
+                    <div id="node-count" class="val">10</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">SOLAR_GRID_LOAD</div>
+                    <div class="val">14%</div>
+                </div>
+            </div>
+    
+    <div class="panel cctv-module">
+        <div class="panel-header">CITY_SURVEILLANCE_GRID</div>
+        <div class="cctv-grid">
+            <div class="camera-box">
+                <div class="cam-label">CAM_01: NORODOM_BLVD</div>
+                <div class="cam-feed cam-1"></div>
+            </div>
+            <div class="camera-box">
+                <div class="cam-label">CAM_02: MONIVONG_BRIDGE</div>
+                <div class="cam-feed cam-2"></div>
+            </div>
+            <div class="camera-box">
+                <div class="cam-label">CAM_03: AIRPORT_ZONE</div>
+                <div class="cam-feed cam-3"></div>
+            </div>
+    </div>
+</div>
+    
+            <div class="action-section">
+                <button class="btn btn-solar" onclick="fireSolar()">
+                    <span class="icon">⚡</span> EXECUTE SOLAR BLAST
+                </button>
+                <button class="btn btn-priority" onclick="spawnEV()">
+                    <span class="icon">🚑</span> PRIORITY OVERRIDE
+                </button>
+            </div>
+        </aside>
 
-    requestAnimationFrame(updateSystem);
-}
+        <main class="main-display">
+            <div class="hologram-map" id="map">
+                <div class="scanline"></div>
+                </div>
+        </main>
 
-// 4. សកម្មភាពការពារ (Defense Actions)
-function fireSolar() {
-    aiSpeak("Activating solar blast. Targeting orbital threats.");
-    map.classList.add('flicker');
-    addLog("SOLAR_DEFENSE_EXECUTED", "var(--gold)");
-    
-    setTimeout(() => {
-        map.classList.remove('flicker');
-        aiSpeak("Threat neutralized. System secure.");
-    }, 2000);
-}
+        <aside class="panel sidebar-right">
+            <div class="panel-header">THREAT_INTELLIGENCE_FEED</div>
+            <div id="log-feed" class="log-container">
+                </div>
+            
+            <div class="intrusion-monitor">
+                <div class="monitor-label">LAST_KNOWN_ATTACKER_IP</div>
+                <div id="attacker-ip" class="val alert-text">NONE</div>
+            </div>
+        </aside>
+    </div>
 
-function spawnEV() {
-    aiSpeak("Priority override initiated. Emergency vehicle on route.");
-    createVehicle(true);
-    addLog("EMERGENCY_OVERRIDE_ACTIVE", "white");
-}
+    <footer class="panel footer-grid">
+        <div class="core-diagnostics">
+            <div class="core-header">[ CORE_SYSTEM_DIAGNOSTICS ]</div>
+            <div id="core-log" class="typing-text">Initializing AI Sentinel Core... Linking to Satellite Constellation...</div>
+        </div>
+        <div class="location-data">
+            <div class="node-info">NODE: ASIA_PACIFIC_01</div>
+            <div class="coords">GPS: 00.0000° N, 000.0000° E</div>
+        </div>
+    </footer>
 
-// 5. ការក្លែងធ្វើការវាយប្រហារ (Threat Simulator)
-function simulateIntrusion() {
-    const ip = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.8.${Math.floor(Math.random()*255)}`;
-    document.getElementById('attacker-ip').innerText = ip;
-    
-    const node = document.createElement('div');
-    node.className = 'threat-node';
-    node.style.left = Math.random() * 90 + '%';
-    node.style.top = Math.random() * 90 + '%';
-    map.appendChild(node);
-    
-    aiSpeak("Warning. Intrusion detected.");
-    addLog(`INTRUSION_DETECTED: ${ip}`, "var(--red)");
-    
-    // បំបាត់ចំណុចវាយប្រហារក្រោយ ៤ វិនាទី
-    setTimeout(() => {
-        node.remove();
-        aiSpeak("Security breach mitigated.");
-    }, 4000);
-}
-
-// 6. មុខងារបន្ថែម Log
-function addLog(msg, color) {
-    const entry = document.createElement('div');
-    entry.style.color = color || 'inherit';
-    entry.style.fontSize = "0.75rem";
-    entry.style.marginBottom = "5px";
-    entry.innerText = `> [${new Date().toLocaleTimeString()}] ${msg}`;
-    logFeed.prepend(entry);
-    
-    // រក្សាទុកត្រឹម ១៥ log ចុងក្រោយ
-    if(logFeed.childNodes.length > 15) logFeed.removeChild(logFeed.lastChild);
-}
-
-// --- ចាប់ផ្តើមដំណើរការប្រព័ន្ធ (Boot sequence) ---
-window.onload = () => {
-    // បង្កើតឡានធម្មតា ១០ គ្រឿង
-    for(let i=0; i<10; i++) createVehicle(false);
-    
-    updateSystem();
-    
-    // បង្កើតការវាយប្រហារសាកល្បងរៀងរាល់ ២៥ វិនាទី
-    setInterval(simulateIntrusion, 25000);
-    
-    aiSpeak("Sentinel OS version 7 point 0 is now online. All systems functional.");
-    addLog("SYSTEM_BOOT_SUCCESS", "var(--cyan)");
-};
+    <script src="script.js"></script>
+    <script src="script1.js"></script>
+    <script src="script2.js"></script>
+    <script src="script3.js"></script>
+</body>
+</html>
