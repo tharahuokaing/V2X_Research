@@ -1,174 +1,133 @@
-<!DOCTYPE html>
-<html lang="km">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V2X Autonomous City Hologram</title>
-    <style>
-        :root {
-            --v2x-cyan: #00f2ff;
-            --v2x-magenta: #ff00bf;
-            --v2x-yellow: #ffcc00;
-            --bg-city: #01040a;
-        }
+/**
+ * CYBER SENTINEL OS v7.0 - Core Script
+ * គ្រប់គ្រងលើ: ចលនា V2X, ប្រព័ន្ធសំឡេង AI, និងការតាមដានការវាយប្រហារ
+ */
 
-        body, html {
-            margin: 0; padding: 0;
-            background-color: var(--bg-city);
-            color: var(--v2x-cyan);
-            font-family: 'Share Tech Mono', monospace;
-            overflow: hidden;
-        }
+const map = document.getElementById('map');
+const logFeed = document.getElementById('log-feed');
+const vehicles = [];
 
-        /* ផ្ទៃ Hologram 3D Perspective */
-        .city-viewport {
-            position: relative;
-            width: 100vw; height: 100vh;
-            perspective: 1200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+// 1. ប្រព័ន្ធសំឡេង AI (AI Voice Synthesis)
+function aiSpeak(msg) {
+    const speech = new SpeechSynthesisUtterance(msg);
+    speech.lang = 'en-US';
+    speech.rate = 1.1; // ល្បឿនលឿនបន្តិចបែបបច្ចេកវិទ្យា
+    speech.pitch = 0.7; // សំឡេងធ្ងន់បែប Robot
+    window.speechSynthesis.speak(speech);
+}
 
-        .hologram-grid {
-            position: relative;
-            width: 800px; height: 600px;
-            background: rgba(0, 242, 255, 0.03);
-            border: 1px solid var(--v2x-cyan);
-            transform: rotateX(60deg) rotateZ(-30deg);
-            transform-style: preserve-3d;
-            box-shadow: 0 0 50px rgba(0, 242, 255, 0.1);
-        }
+// 2. ការបង្កើតរថយន្តស្វ័យប្រវត្តិ (V2X Vehicle Engine)
+function createVehicle(isEV) {
+    const v = document.createElement('div');
+    v.className = isEV ? 'vehicle flicker' : 'vehicle';
+    
+    // បើជាឡានពេទ្យ ឱ្យវាមានពណ៌ស និងពន្លឺខ្លាំង
+    if(isEV) {
+        v.style.background = '#ffffff';
+        v.style.boxShadow = '0 0 20px #ffffff, 0 0 10px #ff0000';
+    }
+    
+    const data = {
+        el: v,
+        x: Math.random() * 800,
+        y: isEV ? 250 : Math.random() * 500, // ឡានពេទ្យរត់គន្លងកណ្តាល
+        speed: isEV ? 7 : (1.2 + Math.random() * 2),
+        isEV: isEV
+    };
+    
+    map.appendChild(v);
+    vehicles.push(data);
+}
 
-        /* បន្ទាត់ផ្លូវ Smart Road */
-        .road {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px dashed var(--v2x-cyan);
-        }
-        .road-v { width: 40px; height: 100%; left: 50%; transform: translateX(-50%); }
-        .road-h { width: 100%; height: 40px; top: 50%; transform: translateY(-50%); }
+// 3. ប្រព័ន្ធដំណើរការចលនា (Main System Loop)
+function updateSystem() {
+    // បច្ចុប្បន្នភាព Unix Timestamp
+    document.getElementById('unix-clock').innerText = Math.floor(Date.now() / 1000);
 
-        /* រថយន្ត Autonomous (AVs) */
-        .vehicle {
-            position: absolute;
-            width: 12px; height: 20px;
-            background: var(--v2x-magenta);
-            box-shadow: 0 0 10px var(--v2x-magenta);
-            border-radius: 2px;
-            z-index: 10;
-        }
-
-        /* V2X Connection Lines (Signal) */
-        .v2x-signal {
-            position: absolute;
-            border: 1px solid var(--v2x-yellow);
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
-        /* Dashboard Floating UI */
-        .v2x-dashboard {
-            position: absolute;
-            top: 20px; left: 20px;
-            width: 300px;
-            background: rgba(0, 242, 255, 0.1);
-            border-left: 5px solid var(--v2x-cyan);
-            padding: 15px;
-            backdrop-filter: blur(5px);
-            z-index: 100;
-        }
-
-        .unix-sync { font-size: 1.5rem; color: #fff; margin: 10px 0; }
-
-        .status-dot {
-            display: inline-block;
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: #0f0;
-            margin-right: 5px;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    </style>
-</head>
-<body>
-
-    <div class="v2x-dashboard">
-        <div style="font-size: 0.8rem;"><span class="status-dot"></span> V2X NETWORK: ONLINE</div>
-        <div class="unix-sync" id="unix-clock">0000000000</div>
-        <div style="font-size: 0.7rem; color: var(--v2x-yellow);">
-            ACTIVE VEHICLES: <span id="vehicle-count">0</span><br>
-            LATENCY: 1.2ms (5G-V2X)<br>
-            CITY SECTOR: NORTH_CENTRAL
-        </div>
-    </div>
-
-    <div class="city-viewport">
-        <div class="hologram-grid" id="city-map">
-            <div class="road road-v"></div>
-            <div class="road road-h"></div>
-            </div>
-    </div>
-
-    <script>
-        const cityMap = document.getElementById('city-map');
-        const vehicles = [];
-        const numVehicles = 8;
-
-        // ១. បង្កើតរថយន្តស្វ័យប្រវត្តិ
-        function initVehicles() {
-            for (let i = 0; i < numVehicles; i++) {
-                const v = document.createElement('div');
-                v.className = 'vehicle';
-                const data = {
-                    el: v,
-                    x: Math.random() * 780,
-                    y: Math.random() * 580,
-                    speed: 1 + Math.random() * 2,
-                    dir: Math.random() > 0.5 ? 'h' : 'v'
-                };
-                cityMap.appendChild(v);
-                vehicles.push(data);
+    // គ្រប់គ្រងចលនារថយន្ត
+    vehicles.forEach((v, index) => {
+        v.x += v.speed;
+        
+        // នៅពេលឡានរត់ផុតអេក្រង់
+        if(v.x > 900) {
+            if(v.isEV) {
+                v.el.remove();
+                vehicles.splice(index, 1);
+                addLog("EV_MISSION_COMPLETE", "var(--cyan)");
+                return;
             }
-            document.getElementById('vehicle-count').innerText = numVehicles;
+            v.x = -30;
         }
+        
+        v.el.style.left = v.x + 'px';
+        v.el.style.top = v.y + 'px';
+    });
 
-        // ២. Script សម្រាប់ចលនា និង V2X Communication
-        function updateCity() {
-            // Update Unix Time
-            document.getElementById('unix-clock').innerText = Math.floor(Date.now() / 1000);
+    requestAnimationFrame(updateSystem);
+}
 
-            vehicles.forEach((v, index) => {
-                if (v.dir === 'v') {
-                    v.y += v.speed;
-                    if (v.y > 600) v.y = -20;
-                } else {
-                    v.x += v.speed;
-                    if (v.x > 800) v.x = -20;
-                }
+// 4. សកម្មភាពការពារ (Defense Actions)
+function fireSolar() {
+    aiSpeak("Activating solar blast. Targeting orbital threats.");
+    map.classList.add('flicker');
+    addLog("SOLAR_DEFENSE_EXECUTED", "var(--gold)");
+    
+    setTimeout(() => {
+        map.classList.remove('flicker');
+        aiSpeak("Threat neutralized. System secure.");
+    }, 2000);
+}
 
-                v.el.style.left = v.x + 'px';
-                v.el.style.top = v.y + 'px';
+function spawnEV() {
+    aiSpeak("Priority override initiated. Emergency vehicle on route.");
+    createVehicle(true);
+    addLog("EMERGENCY_OVERRIDE_ACTIVE", "white");
+}
 
-                // បង្កើតខ្សែ V2X Signal រវាងរថយន្តជិតៗគ្នា
-                if (index > 0) {
-                    const prevV = vehicles[index - 1];
-                    const dist = Math.hypot(v.x - prevV.x, v.y - prevV.y);
-                    if (dist < 150) {
-                        v.el.style.backgroundColor = 'var(--v2x-yellow)';
-                    } else {
-                        v.el.style.backgroundColor = 'var(--v2x-magenta)';
-                    }
-                }
-            });
+// 5. ការក្លែងធ្វើការវាយប្រហារ (Threat Simulator)
+function simulateIntrusion() {
+    const ip = `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.8.${Math.floor(Math.random()*255)}`;
+    document.getElementById('attacker-ip').innerText = ip;
+    
+    const node = document.createElement('div');
+    node.className = 'threat-node';
+    node.style.left = Math.random() * 90 + '%';
+    node.style.top = Math.random() * 90 + '%';
+    map.appendChild(node);
+    
+    aiSpeak("Warning. Intrusion detected.");
+    addLog(`INTRUSION_DETECTED: ${ip}`, "var(--red)");
+    
+    // បំបាត់ចំណុចវាយប្រហារក្រោយ ៤ វិនាទី
+    setTimeout(() => {
+        node.remove();
+        aiSpeak("Security breach mitigated.");
+    }, 4000);
+}
 
-            requestAnimationFrame(updateCity);
-        }
+// 6. មុខងារបន្ថែម Log
+function addLog(msg, color) {
+    const entry = document.createElement('div');
+    entry.style.color = color || 'inherit';
+    entry.style.fontSize = "0.75rem";
+    entry.style.marginBottom = "5px";
+    entry.innerText = `> [${new Date().toLocaleTimeString()}] ${msg}`;
+    logFeed.prepend(entry);
+    
+    // រក្សាទុកត្រឹម ១៥ log ចុងក្រោយ
+    if(logFeed.childNodes.length > 15) logFeed.removeChild(logFeed.lastChild);
+}
 
-        initVehicles();
-        updateCity();
-    </script>
-</body>
-</html>
+// --- ចាប់ផ្តើមដំណើរការប្រព័ន្ធ (Boot sequence) ---
+window.onload = () => {
+    // បង្កើតឡានធម្មតា ១០ គ្រឿង
+    for(let i=0; i<10; i++) createVehicle(false);
+    
+    updateSystem();
+    
+    // បង្កើតការវាយប្រហារសាកល្បងរៀងរាល់ ២៥ វិនាទី
+    setInterval(simulateIntrusion, 25000);
+    
+    aiSpeak("Sentinel OS version 7 point 0 is now online. All systems functional.");
+    addLog("SYSTEM_BOOT_SUCCESS", "var(--cyan)");
+};
