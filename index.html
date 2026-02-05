@@ -3,246 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI SOLAR DEFENSE | CONTROL TERMINAL</title>
+    <title>V2X Autonomous City Hologram</title>
     <style>
         :root {
-            --cyan: #00f2ff;
-            --pink: #ff00bf;
-            --red: #ff3e3e;
-            --bg: #020205;
+            --v2x-cyan: #00f2ff;
+            --v2x-magenta: #ff00bf;
+            --v2x-yellow: #ffcc00;
+            --bg-city: #01040a;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            color: white;
+            margin: 0; padding: 0;
+            background-color: var(--bg-city);
+            color: var(--v2x-cyan);
             font-family: 'Share Tech Mono', monospace;
             overflow: hidden;
         }
 
-        /* ប្លង់ Dashboard */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 350px 1fr 350px;
-            height: 100vh;
-            gap: 15px;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-
-        .panel {
-            background: rgba(0, 242, 255, 0.03);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            border-radius: 5px;
-            padding: 15px;
+        /* ផ្ទៃ Hologram 3D Perspective */
+        .city-viewport {
+            position: relative;
+            width: 100vw; height: 100vh;
+            perspective: 1200px;
             display: flex;
-            flex-direction: column;
-        }
-
-        h2 {
-            font-size: 1rem;
-            color: var(--cyan);
-            border-bottom: 1px solid var(--cyan);
-            padding-bottom: 5px;
-            margin-top: 0;
-        }
-
-        /* IP Remote Access List */
-        .ip-list { flex-grow: 1; overflow-y: auto; }
-        .ip-node {
-            background: rgba(255, 255, 255, 0.05);
-            margin: 8px 0;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            border-left: 2px solid var(--cyan);
         }
 
-        .btn-action {
-            background: transparent;
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
-            padding: 5px 12px;
-            cursor: pointer;
-            font-size: 0.7rem;
-        }
-
-        .btn-action:hover {
-            background: var(--cyan);
-            color: black;
-            box-shadow: 0 0 10px var(--cyan);
-        }
-
-        /* DDoS & Network Monitor */
-        .traffic-bar {
-            width: 100%;
-            height: 10px;
-            background: #111;
-            margin: 10px 0;
+        .hologram-grid {
             position: relative;
+            width: 800px; height: 600px;
+            background: rgba(0, 242, 255, 0.03);
+            border: 1px solid var(--v2x-cyan);
+            transform: rotateX(60deg) rotateZ(-30deg);
+            transform-style: preserve-3d;
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.1);
         }
 
-        .traffic-fill {
-            height: 100%;
-            background: var(--red);
-            width: 65%;
-            box-shadow: 0 0 10px var(--red);
-            animation: pulse 1s infinite;
-        }
-
-        /* ផ្នែកកណ្តាល: បង្គោលការពារ Solar */
-        .visualizer {
-            position: relative;
-            background: radial-gradient(circle at bottom, #0a1128 0%, #020205 100%);
-            border: 1px solid rgba(0, 242, 255, 0.1);
-            overflow: hidden;
-        }
-
-        .tower {
+        /* បន្ទាត់ផ្លូវ Smart Road */
+        .road {
             position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--v2x-cyan);
         }
+        .road-v { width: 40px; height: 100%; left: 50%; transform: translateX(-50%); }
+        .road-h { width: 100%; height: 40px; top: 50%; transform: translateY(-50%); }
 
-        .pole {
-            width: 20px;
-            height: 300px;
-            background: linear-gradient(to right, #111, #444, #111);
-            position: relative;
-        }
-
-        .rings-container {
+        /* រថយន្ត Autonomous (AVs) */
+        .vehicle {
             position: absolute;
-            top: 50px;
-            left: 50%;
+            width: 12px; height: 20px;
+            background: var(--v2x-magenta);
+            box-shadow: 0 0 10px var(--v2x-magenta);
+            border-radius: 2px;
+            z-index: 10;
         }
 
-        .ring {
+        /* V2X Connection Lines (Signal) */
+        .v2x-signal {
             position: absolute;
+            border: 1px solid var(--v2x-yellow);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Dashboard Floating UI */
+        .v2x-dashboard {
+            position: absolute;
+            top: 20px; left: 20px;
+            width: 300px;
+            background: rgba(0, 242, 255, 0.1);
+            border-left: 5px solid var(--v2x-cyan);
+            padding: 15px;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+
+        .unix-sync { font-size: 1.5rem; color: #fff; margin: 10px 0; }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
             border-radius: 50%;
-            border: 2px solid var(--cyan);
-            transform: translate(-50%, -50%) rotateX(75deg);
-            animation: spin 3s linear infinite;
+            background: #0f0;
+            margin-right: 5px;
+            animation: blink 1s infinite;
         }
 
-        @keyframes spin {
-            from { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(0deg); }
-            to { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(360deg); }
-        }
-
-        /* Laser បាញ់តាមការបញ្ជា */
-        .laser {
-            position: absolute;
-            bottom: 300px;
-            left: 50%;
-            width: 6px;
-            height: 0;
-            background: var(--red);
-            transform: translateX(-50%);
-            box-shadow: 0 0 30px var(--red);
-            transition: height 0.1s;
-        }
-
-        /* ប៊ូតុងបញ្ជាបាញ់ (Manual Fire) */
-        .fire-btn {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--red);
-            border: none;
-            color: white;
-            padding: 15px 40px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 0 20px var(--red);
-            z-index: 1000;
-        }
-
-        .fire-btn:active { transform: translateX(-50%) scale(0.95); background: #ff0000; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
 
-<div class="dashboard">
-    <div class="panel">
-        <h2>Remote Node Access</h2>
-        <div class="ip-list" id="ipList">
-            </div>
-        <div style="margin-top: 15px;">
-            <h2>Solar Power Node</h2>
-            <p>Input: 5.4 kW</p>
-            <p>Storage: 98.2%</p>
+    <div class="v2x-dashboard">
+        <div style="font-size: 0.8rem;"><span class="status-dot"></span> V2X NETWORK: ONLINE</div>
+        <div class="unix-sync" id="unix-clock">0000000000</div>
+        <div style="font-size: 0.7rem; color: var(--v2x-yellow);">
+            ACTIVE VEHICLES: <span id="vehicle-count">0</span><br>
+            LATENCY: 1.2ms (5G-V2X)<br>
+            CITY SECTOR: NORTH_CENTRAL
         </div>
     </div>
 
-    <div class="visualizer">
-        <div class="tower">
-            <div class="laser" id="laserBeam"></div>
-            <div class="rings-container">
-                <div class="ring" style="width: 150px; height: 150px;"></div>
-                <div class="ring" style="width: 100px; height: 100px; border-color: var(--pink); animation-direction: reverse;"></div>
+    <div class="city-viewport">
+        <div class="hologram-grid" id="city-map">
+            <div class="road road-v"></div>
+            <div class="road road-h"></div>
             </div>
-            <div class="pole"></div>
-        </div>
-        <button class="fire-btn" onmousedown="fireLaser(true)" onmouseup="fireLaser(false)">DEPLOY LASER (FIRE)</button>
     </div>
 
-    <div class="panel">
-        <h2>DDoS Detection</h2>
-        <div class="traffic-bar"><div class="traffic-fill"></div></div>
-        <p style="font-size: 0.8rem; color: var(--red);">THREAT LEVEL: HIGH</p>
-        <hr style="border: 0.5px solid #333; margin: 15px 0;">
-        <h2>Security Log</h2>
-        <div id="log" style="font-size: 0.7rem; color: #aaa;">
-            [SYSTEM READY]...
-        </div>
-    </div>
-</div>
+    <script>
+        const cityMap = document.getElementById('city-map');
+        const vehicles = [];
+        const numVehicles = 8;
 
-<script>
-    // បង្កើតបញ្ជី IP ក្លែងក្លាយ
-    const ipList = document.getElementById('ipList');
-    const nodes = ['192.168.1.1', '172.16.25.4', '10.0.0.15', '45.21.0.99'];
-    
-    nodes.forEach(ip => {
-        ipList.innerHTML += `
-            <div class="ip-node">
-                <span>${ip}</span>
-                <button class="btn-action" onclick="logAction('${ip}')">REMOTE</button>
-            </div>
-        `;
-    });
-
-    // មុខងារបាញ់ឡាស៊ែរ
-    function fireLaser(active) {
-        const beam = document.getElementById('laserBeam');
-        if (active) {
-            beam.style.height = '1000px';
-            logAction("MANUAL_FIRE_SEQUENCE_ACTIVE");
-        } else {
-            beam.style.height = '0';
+        // ១. បង្កើតរថយន្តស្វ័យប្រវត្តិ
+        function initVehicles() {
+            for (let i = 0; i < numVehicles; i++) {
+                const v = document.createElement('div');
+                v.className = 'vehicle';
+                const data = {
+                    el: v,
+                    x: Math.random() * 780,
+                    y: Math.random() * 580,
+                    speed: 1 + Math.random() * 2,
+                    dir: Math.random() > 0.5 ? 'h' : 'v'
+                };
+                cityMap.appendChild(v);
+                vehicles.push(data);
+            }
+            document.getElementById('vehicle-count').innerText = numVehicles;
         }
-    }
 
-    // មុខងារកត់ត្រា Log
-    const logBox = document.getElementById('log');
-    function logAction(msg) {
-        const time = new Date().toLocaleTimeString();
-        logBox.innerHTML = `[${time}] ${msg}<br>` + logBox.innerHTML;
-    }
+        // ២. Script សម្រាប់ចលនា និង V2X Communication
+        function updateCity() {
+            // Update Unix Time
+            document.getElementById('unix-clock').innerText = Math.floor(Date.now() / 1000);
 
-    // បង្កើត Traffic ក្លែងក្លាយ
-    setInterval(() => {
-        const randomIP = "103.15." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255);
-        logAction(`Packet blocked from ${randomIP}`);
-    }, 4000);
-</script>
+            vehicles.forEach((v, index) => {
+                if (v.dir === 'v') {
+                    v.y += v.speed;
+                    if (v.y > 600) v.y = -20;
+                } else {
+                    v.x += v.speed;
+                    if (v.x > 800) v.x = -20;
+                }
 
+                v.el.style.left = v.x + 'px';
+                v.el.style.top = v.y + 'px';
+
+                // បង្កើតខ្សែ V2X Signal រវាងរថយន្តជិតៗគ្នា
+                if (index > 0) {
+                    const prevV = vehicles[index - 1];
+                    const dist = Math.hypot(v.x - prevV.x, v.y - prevV.y);
+                    if (dist < 150) {
+                        v.el.style.backgroundColor = 'var(--v2x-yellow)';
+                    } else {
+                        v.el.style.backgroundColor = 'var(--v2x-magenta)';
+                    }
+                }
+            });
+
+            requestAnimationFrame(updateCity);
+        }
+
+        initVehicles();
+        updateCity();
+    </script>
 </body>
 </html>
