@@ -10,13 +10,13 @@
 
 ការធ្វើឱ្យមានតុល្យភាពបន្ទុកបណ្តាញថាមពលពន្លឺព្រះអាទិត្យជាមួយនឹងម៉ែត្រថាមពលពេលវេលាជាក់ស្តែង
 
-ការរួមបញ្ចូលបណ្តាញឃ្លាំមើល (ឧ. ការត្រួតពិនិត្យតំបន់ភោជនីយដ្ឋាន)
+ការរួមបញ្ចូលបណ្តាញឃ្លាំមើល 
 
-ព័ត៌មានស៊ើបការណ៍សម្ងាត់គំរាមកំហែងសម្រាប់សុវត្ថិភាពប្រកបដោយភាពសកម្ម
+ព័ត៌មានគំរាមកំហែងសម្រាប់សុវត្ថិភាពប្រកបដោយភាពសកម្ម
 
-ការភ្ជាប់ក្រុមផ្កាយរណបសម្រាប់ការគ្របដណ្តប់ណូតសកល
+ការភ្ជាប់ក្រុមផ្កាយរណបសម្រាប់ការគ្របដណ្តប់ Node សកល
 
-លក្ខណៈពិសេស V2X_NODES_SYNC៖ ធ្វើសមកាលកម្មណូតចំនួន 10+ នៅទូទាំងបណ្តាញចែកចាយ
+លក្ខណៈពិសេស V2X_NODES_SYNC៖ ធ្វើសមកាលកម្ម Node ចំនួន 10+ នៅទូទាំងបណ្តាញចែកចាយ
 
 ការធ្វើរោគវិនិច្ឆ័យដែលមានសុវត្ថិភាព៖ ការចាប់ផ្តើម និងការត្រួតពិនិត្យ AI Sentinel Core
 
@@ -48,11 +48,11 @@ bash cd V2X_Research ស្វែងយល់ពីឯកសារ ឬឯកស�
 
 បន្ទុកបណ្តាញថាមពលព្រះអាទិត្យ៖ ១៤%
 
-ណូត​ដែល​បាន​ធ្វើ​សមកាលកម្ម៖ ១០
+Node ​ដែល​បាន​ធ្វើ​សមកាលកម្ម៖ ១០
 
-ផែនទីបង្ហាញផ្លូវពង្រីកការធ្វើសមកាលកម្មណូតហួសពីអាស៊ីប៉ាស៊ីហ្វិក
+ផែនទីបង្ហាញផ្លូវពង្រីកការធ្វើសមកាលកម្ម Node ហួសពីអាស៊ីប៉ាស៊ីហ្វិក
 
-បង្កើនការវិភាគព័ត៌មានស៊ើបការណ៍សម្ងាត់គំរាមកំហែងពហុភាសា
+បង្កើនការវិភាគព័ត៌មានគំរាមកំហែងពហុភាសា
 
 រួមបញ្ចូលការរៀនម៉ាស៊ីនសម្រាប់ការធ្វើរោគវិនិច្ឆ័យព្យាករណ៍
 
@@ -74,9 +74,9 @@ High-speed network traffic monitoring (up to 4.2 GB/s)
 
 Solar grid load balancing with real-time energy metrics
 
-Surveillance grid integration (e.g., restaurant zone monitoring)
+Surveillance grid integration
 
-Threat intelligence feeds for proactive security
+Threat feeds for proactive security
 
 Satellite constellation linking for global node coverage
 
@@ -94,14 +94,7 @@ Threat Intelligence: Processes feeds in multiple languages/scripts
 Global Positioning: Node GPS tracking for Asia-Pacific and beyond
 
 Getting Started
-Clone the repository:
 
-bash
-git clone https://github.com/tharahuokaing/V2X_Research.git
-Navigate to the project directory:
-
-bash
-cd V2X_Research
 Explore the documentation or simulation files to review system outputs
 
 Use Cases
@@ -125,7 +118,7 @@ Nodes synchronized: 10
 Roadmap
 Expand node synchronization beyond Asia-Pacific
 
-Enhance multilingual threat intelligence parsing
+Enhance multilingual threat parsing
 
 Integrate machine learning for predictive diagnostics
 
