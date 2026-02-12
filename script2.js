@@ -1,6 +1,6 @@
 /**
  * HOLOGRAM ENGINE v7.2 - INTERACTIVE EDITION
- * គ្រប់គ្រងលើ: ការតាមដានដោយកណ្តុរ, ទិន្នន័យវត្ថុ, និងទិដ្ឋភាពឌីណាមិក
+ * គ្រប់គ្រងលើ: ការតាមដាន, ទិន្នន័យវត្ថុ, និងទិដ្ឋភាព Dynamic
  */
 
 const map = document.getElementById('map');
@@ -30,7 +30,7 @@ function createVehicle(isEmergency = false) {
         v.style.boxShadow = '0 0 20px #fff, 0 0 10px var(--red)';
     }
 
-    // បង្កើតស្លាកទិន្នន័យ (បង្ហាញនៅពេលដាក់កណ្តុរពីលើ)
+    // បង្កើតស្លាកទិន្នន័យ
     const vehicleID = Math.random().toString(36).substr(2, 5).toUpperCase();
     const tag = document.createElement('div');
     tag.className = 'vehicle-tag';
@@ -103,7 +103,7 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-// 4. ការបង្វិលផែនទីតាមចលនាកណ្តុរ (Mouse-Follow 3D Rotation)
+// 4. ការបង្វិលផែនទីតាមចលនា Pointer (Mouse-Follow 3D Rotation)
 window.addEventListener('mousemove', (e) => {
     const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
     const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
@@ -113,7 +113,7 @@ window.addEventListener('mousemove', (e) => {
 
 // 5. មុខងារបញ្ជាការពារ និងអាទិភាព
 function fireSolar() {
-    aiSpeak("ប្រព័ន្ធការពារថាមពលព្រះអាទិត្យត្រូវបានដំណើរការ។ កំពុងបញ្ចេញពន្លឺកម្ទេចគោលដៅ។");
+    aiSpeak("ប្រព័ន្ធការពារថាមពលព្រះអាទិត្យត្រូវបានដំណើរការ។ កំពុងបញ្ចេញពន្លឺ។");
     map.classList.add('flicker');
     addLog("ការបញ្ចេញពន្លឺសូឡា: កំពុងប្រតិបត្តិ", "var(--gold)");
     setTimeout(() => {
@@ -137,8 +137,8 @@ function addLog(msg, color) {
 
 // 6. ចាប់ផ្តើមប្រព័ន្ធ (System Boot)
 window.onload = () => {
-    // បង្កើតយានយន្តដំបូង ១៥ គ្រឿង
-    for (let i = 0; i < 15; i++) createVehicle();
+    // បង្កើតយានយន្តដំបូង ២០ គ្រឿង
+    for (let i = 0; i < 20; i++) createVehicle();
     
     animate();
     
