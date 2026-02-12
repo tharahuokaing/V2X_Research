@@ -117,8 +117,8 @@ function addLog(text, color) {
 
 // --- ចាប់ផ្តើមដំណើរការប្រព័ន្ធ (Boot sequence) ---
 window.onload = () => {
-    // បង្កើតរថយន្តធម្មតា ១០ គ្រឿង
-    for(let i=0; i<10; i++) createVehicle(false);
+    // បង្កើតរថយន្តធម្មតា 20 គ្រឿង
+    for(let i=0; i<20; i++) createVehicle(false);
     
     updateSystem();
     
