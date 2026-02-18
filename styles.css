@@ -1,210 +1,114 @@
-/* 1. Global Variables & Basic Setup */
 :root {
-    --cyan: #00f2ff;
-    --pink: #ff00bf;
-    --gold: #ffcc00;
-    --red: #ff3e3e;
-    --bg: #01030a;
-    --glass: rgba(0, 242, 255, 0.03);
-    --border-glow: rgba(0, 242, 255, 0.2);
+    --neon-green: #00ff41;
+    --dark-bg: #0a0a0a;
+    --panel-bg: rgba(0, 50, 0, 0.1);
+    --alert-red: #ff3131;
+    --font-main: 'Share Tech Mono', monospace;
 }
 
-body, html {
-    margin: 0; padding: 0;
-    background: var(--bg);
-    color: var(--cyan);
-    font-family: 'Share Tech Mono', 'Kantumruy Pro', monospace; /* បន្ថែម Font ខ្មែរ */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+body {
+    background-color: var(--dark-bg);
+    color: var(--neon-green);
+    font-family: var(--font-main);
+    margin: 0;
+    overflow: hidden; /* Keeps it feeling like a single-screen OS */
+    text-transform: uppercase;
 }
 
-/* 2. Layout Structure */
-.panel {
-    background: var(--glass);
-    border: 1px solid var(--border-glow);
+/* --- Layout Grid --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    grid-template-rows: calc(100vh - 120px);
+    gap: 15px;
     padding: 15px;
-    backdrop-filter: blur(10px);
-    box-shadow: inset 0 0 15px rgba(0, 242, 255, 0.05);
 }
 
-header {
-    height: 70px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    border-bottom: 2px solid var(--cyan);
-}
-
-.dashboard-container {
-    display: grid;
-    grid-template-columns: 350px 1fr 350px;
-    flex-grow: 1;
-    gap: 10px;
-    padding: 10px;
-}
-
-footer {
-    height: 100px;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border-top: 1px solid var(--border-glow);
-}
-
-/* 3. Hologram Map Display (3D Perspective) */
-
-.main-display {
-    perspective: 1500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-..hologram-map {
-    width: 100%;
-    height: 100%;
-    border: 1px solid var(--cyan);
-    /* កំណត់មុំដើម */
-    transform: rotateX(40deg) rotateZ(-10deg);
-    transform-style: preserve-3d;
-    background: 
-        linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    position: relative;
-    box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
-    
-    /* Transition សម្រាប់ធ្វើឱ្យចលនារលូន */
-    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: transform; /* Hardware Acceleration */
-}
-
-/* ចលនាបង្វិលនៅពេល Mouse Hover */
-.hologram-map:hover {
-    /* បង្វិលបន្តិចទៅម្ខាងទៀត ឬងាកតាម Mouse */
-    transform: rotateX(50deg) rotateZ(15deg);
-    box-shadow: 0 0 60px rgba(0, 242, 255, 0.25);
-}
-
-/* 4. Interactive Elements (Vehicles & Threats) */
-.vehicle {
-    position: absolute;
-    width: 12px; height: 18px;
-    background: var(--pink);
-    box-shadow: 0 0 10px var(--pink);
-    border-radius: 2px;
-    z-index: 10;
-}
-
-.threat-node {
-    position: absolute; width: 20px; height: 20px;
-    background: var(--red); border-radius: 50%;
-    animation: pulse 0.5s infinite;
-    box-shadow: 0 0 30px var(--red);
-    z-index: 20;
-}
-
-/* 5. UI Controls & Typography */
-.val { 
-    font-size: 1.6rem; 
-    color: #fff; 
-    text-shadow: 0 0 10px var(--cyan); 
-}
-
-.btn {
-    width: 100%; padding: 12px;
-    background: transparent; border: 1px solid var(--cyan);
-    color: var(--cyan); cursor: pointer;
-    text-transform: uppercase; margin-top: 10px;
-    transition: all 0.3s ease;
-}
-
-.btn:hover { 
-    background: var(--cyan); 
-    color: #000; 
-    box-shadow: 0 0 20px var(--cyan); 
-}
-
-.btn-priority { 
-    border-color: var(--pink); 
-    color: var(--pink); 
-}
-
-/* 6. Animations System */
-@keyframes scan { 
-    from { top: 0; } 
-    to { top: 100%; } 
-}
-
-.scanline {
-    position: absolute; width: 100%; height: 5px;
-    background: var(--cyan); opacity: 0.2;
-    animation: scan 5s linear infinite;
-    pointer-events: none;
-}
-
-.flicker { animation: flicker 0.1s infinite; }
-@keyframes flicker { 
-    0% { opacity: 1; } 
-    50% { opacity: 0.7; } 
-}
-
-@keyframes pulse { 
-    0% { transform: scale(1); opacity: 1; } 
-    100% { transform: scale(1.5); opacity: 0; } 
-}
-
-.cctv-grid {
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.camera-box {
-    border: 1px solid rgba(0, 242, 255, 0.3);
+.panel {
+    border: 1px solid var(--neon-green);
+    background: var(--panel-bg);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
     position: relative;
     overflow: hidden;
-    height: 80px;
 }
 
-.cam-label {
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    font-size: 0.55rem;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 5;
+/* --- Header & Footer --- */
+header, footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 25px;
+    height: 40px;
+    border-bottom: 1px solid var(--neon-green);
 }
 
-.cam-feed {
+/* --- Glitch Effect for Branding --- */
+.glitch-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 2px 0 var(--alert-red);
+    animation: glitch 3s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+/* --- CRT Scanline Animation --- */
+.scanline {
     width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, #051015 0%, #0a202a 100%);
+    height: 2px;
+    background: rgba(0, 255, 65, 0.2);
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+    from { top: 0; }
+    to { top: 100%; }
+}
+
+/* --- CCTV Module --- */
+.cam-feed {
     position: relative;
+    border: 1px solid #333;
 }
 
-/* បង្កើត Effect ស្កេនលើកាមេរ៉ា */
-.cam-feed::before {
-    content: "SCANNING...";
+.live-feed {
+    width: 100%;
+    filter: sepia(100%) hue-rotate(90deg) brightness(80%) contrast(120%);
+}
+
+.ai-overlay {
     position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 0.6rem;
-    opacity: 0.5;
-    animation: blink 1s infinite;
+    top: 10px;
+    left: 10px;
+    font-size: 0.7rem;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 5px;
 }
 
-.cam-feed::after {
-    content: "";
-    position: absolute;
-    width: 100%; height: 2px;
-    background: rgba(0, 242, 255, 0.2);
-    animation: camScan 3s linear infinite;
+/* --- Buttons --- */
+.btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid var(--neon-green);
+    color: var(--neon-green);
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-@keyframes camScan { 0% { top: 0; } 100% { top: 100%; } }
-@keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
+.btn:hover {
+    background: var(--neon-green);
+    color: black;
+}
