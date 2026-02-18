@@ -1,68 +1,68 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER SENTINEL OS</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>SENTINEL OS | Cyber Defense Interface</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="os-terminal">
 
-    <header class="panel">
+    <header class="panel header-bar">
         <div class="os-brand">
-            <span class="glitch-text">SENTINEL OS v7.0</span>
+            <span class="glitch-text" data-text="SENTINEL OS v7.0">SENTINEL OS v7.0</span>
         </div>
-        <div class="time-module">
-            <span class="label">UNIX_CLOCK:</span>
-            <span id="unix-clock" class="clock-display">0000000000</span>
-        </div>
-        <div class="security-status">
-            STATUS: <span id="sys-status" style="color: #0f0;">SECURE</span>
+        
+        <div class="header-metrics">
+            <div class="metric-item">
+                <span class="label">UNIX_CLOCK:</span>
+                <span id="unix-clock" class="val-mono">0000000000</span>
+            </div>
+            <div class="metric-item">
+                <span class="label">SYS_STATUS:</span>
+                <span id="sys-status" class="status-indicator secure">SECURE</span>
+            </div>
         </div>
     </header>
 
-    <div class="dashboard-container">
+    <div class="dashboard-grid">
         
         <aside class="panel sidebar-left">
-            <div class="stat-section">
-                <div class="stat-box">
-                    <div class="stat-label">NETWORK_TRAFFIC</div>
-                    <div class="val">4.2 GB/s</div>
+            <section class="stat-group">
+                <div class="stat-card">
+                    <small>NETWORK_TRAFFIC</small>
+                    <div class="val">4.2 <span class="unit">GB/s</span></div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">V2X_NODES_SYNC</div>
+                <div class="stat-card">
+                    <small>V2X_NODES_SYNC</small>
                     <div id="node-count" class="val">10</div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">SOLAR_GRID_LOAD</div>
+                <div class="stat-card">
+                    <small>SOLAR_GRID_LOAD</small>
                     <div class="val">14%</div>
                 </div>
-            </div>
+            </section>
             
-            <div class="panel cctv-module">
-    <div class="panel-header">SURVEILLANCE_GRID</div>
-    <div class="cctv-grid">
-        <div class="camera-box">
-            <div class="cam-label">CAM_03: SUN MONITOR</div>
-            <div class="cam-feed cam-3">
-                <!-- Live Sun image from NASA SDO -->
-                <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0171.jpg" 
-                     alt="Live Sun Monitor" 
-                     class="live-feed">
-
-                <!-- System overlay simulating 32-bit overflow -->
-                <div class="ai-overlay">
-                    <p>[!] SIMULATING 32-BIT OVERFLOW...</p>
-                    <p>T-Zero: Tue, 19 Jan 2038 03:14:07 GMT</p>
-                    <p>Overflow: Fri, 13 Dec 1901 20:45:52 GMT</p>
+            <section class="panel cctv-module">
+                <div class="panel-header">SURVEILLANCE_GRID</div>
+                <div class="camera-container">
+                    <div class="cam-label">CAM_03: SUN_MONITOR_SDO</div>
+                    <div class="cam-feed">
+                        <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0171.jpg" 
+                             alt="Live Sun Monitor" class="live-feed">
+                        
+                        <div class="ai-overlay">
+                            <p class="alert-blink">[!] 32-BIT OVERFLOW SIMULATION</p>
+                            <p>T-ZERO: 19 JAN 2038</p>
+                            <p>STATUS: MONITORING</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+            </section>
     
-            <div class="action-section">
+            <div class="action-grid">
                 <button class="btn btn-solar" onclick="fireSolar()">
                     <span class="icon">⚡</span> EXECUTE SOLAR BLAST
                 </button>
@@ -72,32 +72,35 @@
             </div>
         </aside>
 
-        <main class="main-display">
+        <main class="panel main-display">
             <div class="hologram-map" id="map">
                 <div class="scanline"></div>
+                <div class="ui-interlace"></div>
                 </div>
         </main>
 
         <aside class="panel sidebar-right">
-            <div class="panel-header">CTI_FEED</div>
+            <div class="panel-header">CTI_FEED (THREAT_INTEL)</div>
             <div id="log-feed" class="log-container">
-                </div>
+                <div class="log-entry">[INFO] System Handshake Complete...</div>
+                <div class="log-entry">[WARN] Anomalous Packet detected at Node 07...</div>
+            </div>
             
             <div class="intrusion-monitor">
                 <div class="monitor-label">LAST_KNOWN_ATTACKER_IP</div>
-                <div id="attacker-ip" class="val alert-text">NONE</div>
+                <div id="attacker-ip" class="val alert-text">0.0.0.0</div>
             </div>
         </aside>
     </div>
 
-    <footer class="panel footer-grid">
+    <footer class="panel footer-bar">
         <div class="core-diagnostics">
-            <div class="core-header">[ CORE_SYSTEM_DIAGNOSTICS ]</div>
-            <div id="core-log" class="typing-text">Initializing AI Sentinel Core... Linking to Satellite Constellation...</div>
+            <span class="label">[ CORE_SYSTEM_DIAGNOSTICS ]</span>
+            <span id="core-log" class="typing-text">Initializing AI Sentinel Core... Linking to Satellite Constellation...</span>
         </div>
-        <div class="location-data">
-            <div class="node-info">NODE: Earth</div>
-            <div class="coords">GPS: 00.0000° N, 000.0000° E</div>
+        <div class="meta-data">
+            <div class="node-info">LOCATION: <span class="val-mono">EARTH_PRIME</span></div>
+            <div class="coords">GPS: <span class="val-mono">00.0000° N, 000.0000° E</span></div>
         </div>
     </footer>
 
@@ -105,5 +108,6 @@
     <script src="script1.js"></script>
     <script src="script2.js"></script>
     <script src="script3.js"></script>
+        
 </body>
 </html>
