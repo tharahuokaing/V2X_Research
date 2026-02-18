@@ -39,14 +39,26 @@
                     <div class="val">14%</div>
                 </div>
             </div>
-    
-    <div class="panel cctv-module">
-        <div class="panel-header">SURVEILLANCE_GRID</div>
-        <div class="cctv-grid">
-            <div class="camera-box">
-                <div class="cam-label">CAM_03: ZONE</div>
-                <div class="cam-feed cam-3"></div>
+            
+            <div class="panel cctv-module">
+    <div class="panel-header">SURVEILLANCE_GRID</div>
+    <div class="cctv-grid">
+        <div class="camera-box">
+            <div class="cam-label">CAM_03: SUN MONITOR</div>
+            <div class="cam-feed cam-3">
+                <!-- Live Sun image from NASA SDO -->
+                <img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0171.jpg" 
+                     alt="Live Sun Monitor" 
+                     class="live-feed">
+
+                <!-- System overlay simulating 32-bit overflow -->
+                <div class="ai-overlay">
+                    <p>[!] SIMULATING 32-BIT OVERFLOW...</p>
+                    <p>T-Zero: Tue, 19 Jan 2038 03:14:07 GMT</p>
+                    <p>Overflow: Fri, 13 Dec 1901 20:45:52 GMT</p>
+                </div>
             </div>
+        </div>
     </div>
 </div>
     
