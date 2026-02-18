@@ -112,3 +112,97 @@ header, footer {
     background: var(--neon-green);
     color: black;
 }
+
+:root {
+    --imperial-gold: #d4af37;   /* ពណ៌មាសសន្លឹក */
+    --royal-gold: #ffdf00;      /* ពណ៌មាសភ្លឺចាំង */
+    --obsidian-black: #050505;  /* ពណ៌ខ្មៅរលើប */
+    --royal-red: #8b0000;       /* ពណ៌ក្រហមឈាមជ្រូកសម្រាប់អាសន្ន */
+    --glass-bg: rgba(20, 20, 20, 0.9);
+    --font-royal: 'Kantumruy Pro', sans-serif;
+}
+
+body {
+    background-color: var(--obsidian-black);
+    color: var(--imperial-gold);
+    font-family: var(--font-royal);
+    margin: 0;
+    overflow: hidden;
+    /* បន្ថែមរូបរាង Background បែបសរសៃមាសស្តើងៗ */
+    background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+/* --- ស៊ុមបន្ទះបញ្ជាបែបបុរាណលាយទំនើប --- */
+.panel {
+    border: 2px solid var(--imperial-gold);
+    background: var(--glass-bg);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2), inset 0 0 10px rgba(212, 175, 55, 0.1);
+    border-radius: 2px;
+    position: relative;
+}
+
+/* --- ចំណងជើងព្រះនគរ (Branding) --- */
+.glitch-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--royal-gold);
+    text-shadow: 0 0 15px rgba(255, 223, 0, 0.6);
+    letter-spacing: 5px;
+}
+
+/* --- ប៊ូតុងបញ្ជាព្រះរាជបញ្ជា --- */
+.btn {
+    background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+    border: 1px solid var(--imperial-gold);
+    color: var(--imperial-gold);
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+}
+
+.btn:hover {
+    background: var(--imperial-gold);
+    color: var(--obsidian-black);
+    box-shadow: 0 0 25px var(--imperial-gold);
+}
+
+/* --- ក្រាហ្វិកបញ្ជា (Map Viewport) --- */
+.main-stage {
+    border: 3px double var(--imperial-gold);
+    background: radial-gradient(circle, #111, #050505);
+}
+
+/* --- ចលនាស្កេនបែបមាស (Gold Scanline) --- */
+.scanline {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, transparent, var(--royal-gold), transparent);
+    opacity: 0.3;
+    position: absolute;
+    animation: royalScan 5s linear infinite;
+}
+
+@keyframes royalScan {
+    0% { top: 0; }
+    100% { top: 100%; }
+}
+
+/* --- ស្ថានភាពអាសន្ន (Alert States) --- */
+.val-alert {
+    color: #ff4500;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ff4500;
+}
+
+.status-active {
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.5; }
+}
